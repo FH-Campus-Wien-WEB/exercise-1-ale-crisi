@@ -7,6 +7,12 @@
     <title>Movies!</title>
     <style>
         /* Part 3: Your styling goes here */
+
+        .label {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #ffffff;
+        }
         /* Grundlayout der Seite */
         body {
             font-family: 'Courier New', monospace; /* Schriftart */
@@ -107,19 +113,31 @@
                         });
                         article.appendChild(genreDiv);
 
-                        // Regisseure als Absatz erstellen
+                        // Directors als Absatz mit fettem Label
                         const directors = document.createElement('p');
-                        directors.textContent = 'Directors: ' + movie.Directors.join(', '); // Array zu String
+                        const dirLabel = document.createElement('span');  // span nur für das Label
+                        dirLabel.textContent = 'Directors: ';
+                        dirLabel.classList.add('label');                   // CSS-Klasse für Styling
+                        directors.appendChild(dirLabel);                   // Label ins p einfügen
+                        directors.append(movie.Directors.join(', '));       // Namen dahinter anhängen
                         article.appendChild(directors);
 
-                        // Autoren als Absatz erstellen
+                        // Writers als Absatz mit fettem Label
                         const writers = document.createElement('p');
-                        writers.textContent = 'Writers: ' + movie.Writers.join(', ');
+                        const wrLabel = document.createElement('span');
+                        wrLabel.textContent = 'Writers: ';
+                        wrLabel.classList.add('label');
+                        writers.appendChild(wrLabel);
+                        writers.append(movie.Writers.join(', '));
                         article.appendChild(writers);
 
-                        // Schauspieler als Absatz erstellen
+                        // Actors als Absatz mit fettem Label
                         const actors = document.createElement('p');
-                        actors.textContent = 'Actors: ' + movie.Actors.join(', ');
+                        const actLabel = document.createElement('span');
+                        actLabel.textContent = 'Actors: ';
+                        actLabel.classList.add('label');
+                        actors.appendChild(actLabel);
+                        actors.append(movie.Actors.join(', '));
                         article.appendChild(actors);
 
                         // Fertiges article-Element zur Seite hinzufügen

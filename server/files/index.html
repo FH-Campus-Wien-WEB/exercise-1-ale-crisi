@@ -7,6 +7,53 @@
     <title>Movies!</title>
     <style>
         /* Part 3: Your styling goes here */
+        /* Grundlayout der Seite */
+        body {
+            font-family: 'Courier New', monospace; /* Schriftart */
+            max-width: 900px;                      /* maximale Breite */
+            margin: 0 auto;                        /* zentriert die Seite */
+            padding: 20px;                         /* Abstand vom Rand */
+            background-color: #0d1b2a;            /* dunkler Hintergrund */
+            color: #a9b7c6;                        /* helle Textfarbe */
+        }
+
+        /* Film-Karte */
+        article {
+            background-color: #1a2a3a;            /* dunkles Blau */
+            border-radius: 12px;                   /* runde Ecken */
+            margin: 20px 0;                        /* Abstand zwischen Karten */
+            padding: 20px;                         /* Abstand innerhalb der Karte */
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4); /* Schatten für Tiefe */
+        }
+
+        /* Poster-Bild */
+        img {
+            border-radius: 8px;                    /* runde Ecken */
+            max-width: 150px;                      /* maximale Breite */
+        }
+
+        /* Filmtitel */
+        h1 {
+            font-weight: bold;                     /* fett */
+            margin: 0 0 10px 0;                   /* Abstand unten */
+            color: #ffffff;                        /* weiße Farbe */
+        }
+
+        /* Absätze */
+        p {
+            margin: 6px 0;                         /* kleiner Abstand oben und unten */
+        }
+
+        /* Genre-Badges */
+        .genre {
+            background-color: #1a8cff;            /* blaue Hintergrundfarbe */
+            color: white;                          /* weißer Text */
+            padding: 3px 10px;                     /* Innenabstand */
+            border-radius: 20px;                   /* runde Form */
+            display: inline-block;                 /* nebeneinander anzeigen */
+            margin-right: 6px;                     /* Abstand zwischen Badges */
+            font-size: 0.85em;                     /* etwas kleinere Schrift */
+        }
     </style>
     <script>
         function reverseString(s) {
@@ -18,8 +65,66 @@
             xhr.onload = function () {
                 const bodyElement = document.querySelector("body")
                 if (xhr.status == 200) {
-		            /* Part 2: Build the HTML elements here and append them to the body */ 
-                    bodyElement.append(reverseString(xhr.responseText))
+		            /* Part 2: Build the HTML elements here and append them to the body */
+
+                    // JSON-Text vom Server in ein JavaScript-Array umwandeln
+                    const movies = JSON.parse(xhr.responseText);
+
+                    // Jeden Film im Array durchgehen
+                    movies.forEach(function(movie) {
+
+                        // Container-Element für jeden Film erstellen
+                        const article = document.createElement('article');
+
+                        // Poster-Bild erstellen
+                        const img = document.createElement('img');
+                        img.src = movie.Poster;      // Bild-URL setzen
+                        img.alt = movie.Title;       // Alternativtext setzen
+                        article.appendChild(img);    // Bild zum article hinzufügen
+
+                        // Titel als Überschrift erstellen
+                        const h1 = document.createElement('h1');
+                        h1.textContent = movie.Title;
+                        article.appendChild(h1);
+
+                        // Meta-Infos als Absatz erstellen
+                        const p = document.createElement('p');
+                        p.textContent = movie.Released + ' | ' + movie.Runtime + ' min | IMDb: ' + movie.imdbRating + ' | Metascore: ' + movie.Metascore;
+                        article.appendChild(p);
+
+                        // Handlung als Absatz erstellen
+                        const plot = document.createElement('p');
+                        plot.textContent = movie.Plot;
+                        article.appendChild(plot);
+
+                        // Genres als einzelne Badges erstellen
+                        const genreDiv = document.createElement('div');
+                        movie.Genres.forEach(function(genre) {
+                            const span = document.createElement('span');
+                            span.textContent = genre;
+                            span.classList.add('genre'); // CSS-Klasse für Styling
+                            genreDiv.appendChild(span);
+                        });
+                        article.appendChild(genreDiv);
+
+                        // Regisseure als Absatz erstellen
+                        const directors = document.createElement('p');
+                        directors.textContent = 'Directors: ' + movie.Directors.join(', '); // Array zu String
+                        article.appendChild(directors);
+
+                        // Autoren als Absatz erstellen
+                        const writers = document.createElement('p');
+                        writers.textContent = 'Writers: ' + movie.Writers.join(', ');
+                        article.appendChild(writers);
+
+                        // Schauspieler als Absatz erstellen
+                        const actors = document.createElement('p');
+                        actors.textContent = 'Actors: ' + movie.Actors.join(', ');
+                        article.appendChild(actors);
+
+                        // Fertiges article-Element zur Seite hinzufügen
+                        bodyElement.appendChild(article);
+                    });
                 } else {
                     bodyElement.append("Daten konnten nicht geladen werden, Status " + xhr.status + " - " + xhr.statusText)
                 }
